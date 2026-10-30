@@ -1,0 +1,185 @@
+
+/* ==========================================
+   MINECORE 360 - ELECTRO DATA S.A.C.
+   Diseño UX/UI industrial
+   ========================================== */
+
+:root {
+    --mine-azul: #101e32;
+    --mine-azul-claro: #1c324d;
+    --mine-amarillo: #fbbf24;
+    --mine-fondo: #f5f7fb;
+    --mine-texto: #17263c;
+}
+
+/* ESTILOS GENERALES */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--mine-fondo);
+    color: var(--mine-texto);
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: var(--mine-azul) !important;
+    padding: 18px 0;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar .nav-link {
+    color: #e2e8f0 !important;
+    margin-left: 12px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--mine-amarillo) !important;
+}
+
+.navbar .btn-warning {
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+/* PORTADA PRINCIPAL */
+header#inicio {
+    position: relative;
+    min-height: 610px;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(8, 20, 35, 0.95) 0%,
+            rgba(8, 20, 35, 0.86) 45%,
+            rgba(8, 20, 35, 0.30) 100%
+        ),
+        url('/img/mina-portada.jpg') center/cover no-repeat;
+}
+
+header#inicio .container {
+    position: relative;
+    z-index: 1;
+}
+
+header#inicio h1 {
+    max-width: 900px;
+    line-height: 1.15;
+}
+
+header#inicio .lead {
+    max-width: 730px;
+    color: #e2e8f0;
+}
+
+/* BOTONES */
+.btn-warning {
+    background-color: var(--mine-amarillo);
+    border-color: var(--mine-amarillo);
+    color: #101e32;
+    font-weight: 600;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.btn-warning:hover {
+    background-color: #f5ad09;
+    border-color: #f5ad09;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(251, 191, 36, 0.25);
+}
+
+/* TARJETAS */
+.card {
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(16, 30, 50, 0.12) !important;
+}
+
+.card-body {
+    padding: 28px;
+}
+
+.card-title {
+    color: var(--mine-azul);
+    font-weight: 700;
+}
+
+.card-text {
+    color: #617086;
+}
+
+/* SECCIONES */
+section {
+    scroll-margin-top: 95px;
+}
+
+section h2 {
+    color: var(--mine-azul);
+    letter-spacing: -0.5px;
+}
+
+/* SECCIÓN DE ROLES */
+#roles {
+    background: #edf2f8 !important;
+}
+
+#roles .card {
+    border-top: 4px solid var(--mine-amarillo);
+}
+
+/* FOOTER */
+footer {
+    background-color: var(--mine-azul) !important;
+}
+
+/* DISEÑO RESPONSIVO */
+@media (max-width: 991px) {
+    .navbar .nav-link {
+        margin-left: 0;
+        padding: 12px 0;
+    }
+
+    header#inicio {
+        min-height: 540px;
+        background-position: 60% center;
+    }
+
+    header#inicio h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    header#inicio {
+        min-height: 520px;
+    }
+
+    header#inicio h1 {
+        font-size: 2rem;
+    }
+
+    header#inicio .lead {
+        font-size: 1rem;
+    }
+
+    .card-body {
+        padding: 22px;
+    }
+}

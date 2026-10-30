@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Historial de Inspecciones | MINECORE 360</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --azul: #10233e;
+        --azul-sec: #183455;
+        --amarillo: #f5bc26;
+        --fondo: #f2f5f9;
+        --borde: #dce4ed;
+        --texto: #28384d;
+      }
+
+      body {
+        background: var(--fondo);
+        color: var(--texto);
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+      }
+
+      .navbar-minecore {
+        background: var(--azul);
+        border-bottom: 4px solid var(--amarillo);
+        padding: 14px 0;
+      }
+
+      .marca {
+        color: #fff !important;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-decoration: none;
+      }
+
+      .marca span {
+        color: var(--amarillo);
+      }
+
+      .nav-enlace {
+        color: #e8edf5;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .nav-enlace:hover {
+        color: var(--amarillo);
+      }
+
+      .contenedor {
+        max-width: 1450px;
+        margin: 32px auto;
+        padding: 0 20px;
+      }
+
+      .encabezado {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 22px;
+      }
+
+      .titulo {
+        color: var(--azul);
+        font-weight: 800;
+        font-size: 28px;
+        margin: 0;
+      }
+
+      .subtitulo {
+        color: #66758b;
+        font-size: 14px;
+        margin-top: 6px;
+        margin-bottom: 0;
+      }
+
+      .tarjeta {
+        background: #fff;
+        border: 1px solid var(--borde);
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(20, 40, 70, 0.05);
+        margin-bottom: 22px;
+        overflow: hidden;
+      }
+
+      .tarjeta-titulo {
+        background: #fff;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--borde);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--azul);
+        font-weight: 800;
+      }
+
+      .tarjeta-cuerpo {
+        padding: 22px;
+      }
+
+      .form-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #47566a;
+      }
+
+      .form-control,
+      .form-select {
+        border-color: #d5dfea;
+        border-radius: 8px;
+        min-height: 42px;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #d3a229;
+        box-shadow: 0 0 0 3px rgba(245, 188, 38, 0.15);
+      }
+
+      .btn-amarillo {
+        background: var(--amarillo);
+        border: 1px solid var(--amarillo);
+        color: #17283c;
+        font-weight: 800;
+        border-radius: 8px;
+        padding: 10px 16px;
+      }
+
+      .btn-amarillo:hover {
+        background: #e5ac16;
+        border-color: #e5ac16;
+        color: #17283c;
+      }
+
+      .btn-azul {
+        background: var(--azul);
+        border: 1px solid var(--azul);
+        color: #fff;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 10px 16px;
+      }
+
+      .btn-azul:hover {
+        background: #254465;
+        color: #fff;
+      }
+
+      .btn-exportar {
+        background: #198754;
+        color: #fff;
+        border: 1px solid #198754;
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 10px 16px;
+      }
+
+      .btn-exportar:hover {
+        background: #146c43;
+        color: #fff;
+      }
+
+      .tabla-minecore {
+        margin-bottom: 0;
+        font-size: 13px;
+      }
+
+      .tabla-minecore thead th {
+        background: var(--azul);
+        color: #fff;
+        padding: 14px 12px;
+        white-space: nowrap;
+        font-weight: 700;
+        border: none;
+      }
+
+      .tabla-minecore tbody td {
+        padding: 13px 12px;
+        vertical-align: middle;
+        border-color: #e8edf2;
+      }
+
+      .tabla-minecore tbody tr:hover {
+        background: #f8fafc;
+      }
+
+      .etiqueta-estado {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .estado-borrador {
+        background: #e9edf2;
+        color: #475569;
+      }
+
+      .estado-pendiente {
+        background: #fff1c5;
+        color: #916000;
+      }
+
+      .estado-observada {
+        background: #ffe0df;
+        color: #b42318;
+      }
+
+      .estado-aprobada {
+        background: #daf5e7;
+        color: #087647;
+      }
+
+      .acciones {
+        display: flex;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+
+      .acciones .btn {
+        white-space: nowrap;
+        font-size: 12px;
+      }
+
+      .contador {
+        background: #edf2f7;
+        color: var(--azul);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .pie {
+        text-align: center;
+        color: #78869a;
+        font-size: 12px;
+        padding: 25px;
+      }
+
+      @media (max-width: 768px) {
+        .titulo {
+          font-size: 23px;
+        }
+
+        .contenedor {
+          margin-top: 20px;
+          padding: 0 12px;
+        }
+
+        .tarjeta-cuerpo {
+          padding: 16px;
+        }
+
+        .acciones {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- BARRA SUPERIOR -->
+    <nav class="navbar navbar-minecore">
+      <div class="container-fluid px-4">
+        <a class="marca" th:href="@{/dashboard}"> MINECORE <span>360</span> </a>
+
+        <div class="d-flex align-items-center flex-wrap gap-3">
+          <a class="nav-enlace" th:href="@{/dashboard}">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+          </a>
+
+          <a class="nav-enlace" th:href="@{/inspecciones}">
+            <i class="bi bi-clipboard-check"></i>
+            Inspecciones
+          </a>
+
+          <a
+            class="nav-enlace"
+            th:href="@{/camiones}"
+            th:if="${esAdmin or !esEstandar}"
+          >
+            <i class="bi bi-truck"></i>
+            Camiones
+          </a>
+
+          <form th:action="@{/logout}" method="post" class="m-0">
+            <button type="submit" class="btn btn-sm btn-outline-light">
+              <i class="bi bi-box-arrow-right"></i>
+              Salir
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <main class="contenedor">
+      <!-- ENCABEZADO -->
+      <div class="encabezado">
+        <div>
+          <h1 class="titulo">
+            <i class="bi bi-clipboard-data"></i>
+            Historial de Inspecciones
+          </h1>
+
+          <p class="subtitulo">
+            Gestión y control de inspecciones preventivas de sistemas
+            tecnológicos en flota minera.
+          </p>
+        </div>
+
+        <a class="btn btn-amarillo" th:href="@{/inspecciones/nueva}">
+          <i class="bi bi-plus-circle"></i>
+          Nueva inspección
+        </a>
+      </div>
+
+      <!-- MENSAJE DE EXITO -->
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        th:if="${mensajeExito != null}"
+      >
+        <i class="bi bi-check-circle-fill"></i>
+
+        <strong>Operación exitosa:</strong>
+
+        <span th:text="${mensajeExito}"></span>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <!-- FILTROS -->
+      <section class="tarjeta">
+        <div class="tarjeta-titulo">
+          <i class="bi bi-funnel"></i>
+          Filtros de búsqueda
+        </div>
+
+        <div class="tarjeta-cuerpo">
+          <form th:action="@{/inspecciones}" method="get">
+            <div class="row g-3">
+              <!-- CAMION -->
+              <div class="col-lg-3 col-md-6">
+                <label for="camionId" class="form-label"> Camión </label>
+
+                <select id="camionId" name="camionId" class="form-select">
+                  <option value="">Todos los camiones</option>
+
+                  <option
+                    th:each="c : ${camiones}"
+                    th:value="${c.id}"
+                    th:text="${c.codigo}"
+                    th:selected="${camionId != null and camionId == c.id}"
+                  ></option>
+                </select>
+              </div>
+
+              <!-- TECNICO -->
+              <div class="col-lg-3 col-md-6">
+                <label for="tecnico" class="form-label"> Técnico </label>
+
+                <input
+                  type="text"
+                  id="tecnico"
+                  name="tecnico"
+                  class="form-control"
+                  placeholder="Nombre del técnico"
+                  th:value="${tecnico}"
+                />
+              </div>
+
+              <!-- FECHA -->
+              <div class="col-lg-3 col-md-6">
+                <label for="fecha" class="form-label"> Fecha </label>
+
+                <input
+                  type="date"
+                  id="fecha"
+                  name="fecha"
+                  class="form-control"
+                  th:value="${fecha}"
+                />
+              </div>
+
+              <!-- ESTADO -->
+              <div class="col-lg-3 col-md-6">
+                <label for="estado" class="form-label"> Estado </label>
+
+                <select id="estado" name="estado" class="form-select">
+                  <option value="">Todos los estados</option>
+
+                  <option
+                    value="BORRADOR"
+                    th:selected="${estado == 'BORRADOR'}"
+                  >
+                    Borrador
+                  </option>
+
+                  <option
+                    value="PENDIENTE"
+                    th:selected="${estado == 'PENDIENTE'}"
+                  >
+                    Pendiente
+                  </option>
+
+                  <option
+                    value="OBSERVADA"
+                    th:selected="${estado == 'OBSERVADA'}"
+                  >
+                    Observada
+                  </option>
+
+                  <option
+                    value="APROBADA"
+                    th:selected="${estado == 'APROBADA'}"
+                  >
+                    Aprobada
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- BOTONES FILTROS -->
+            <div class="d-flex flex-wrap gap-2 mt-4">
+              <button type="submit" class="btn btn-azul">
+                <i class="bi bi-search"></i>
+                Buscar
+              </button>
+
+              <a class="btn btn-outline-secondary" th:href="@{/inspecciones}">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                Limpiar
+              </a>
+
+              <!--
+                        EXPORTACION EXCEL:
+                        Envía los filtros del formulario.
+                        El servidor restringe por usuario.
+                    -->
+              <button
+                type="submit"
+                class="btn btn-exportar"
+                th:formaction="@{/inspecciones/exportar/excel}"
+                formmethod="get"
+              >
+                <i class="bi bi-file-earmark-excel"></i>
+                Exportar Excel
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TABLA -->
+      <section class="tarjeta">
+        <div class="tarjeta-titulo d-flex justify-content-between">
+          <span>
+            <i class="bi bi-table"></i>
+            Registros de inspección
+          </span>
+
+          <span
+            class="contador"
+            th:text="|${#lists.size(inspecciones)} registros|"
+          >
+            0 registros
+          </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table tabla-minecore">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>CAMIÓN</th>
+                <th>FECHA</th>
+                <th>TÉCNICO</th>
+                <th>HORÓMETRO</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr th:each="inspeccion : ${inspecciones}">
+                <td>
+                  <strong th:text="${inspeccion.id}"> 1 </strong>
+                </td>
+
+                <td>
+                  <strong th:text="${inspeccion.camion.codigo}">
+                    CA-785D-001
+                  </strong>
+                </td>
+
+                <td
+                  th:text="${#temporals.format(inspeccion.fechaInspeccion, 'dd/MM/yyyy HH:mm')}"
+                >
+                  26/10/2026
+                </td>
+
+                <td th:text="${inspeccion.tecnico}">Técnico</td>
+
+                <td th:text="${inspeccion.horometro}">0.00</td>
+
+                <td>
+                  <span
+                    class="etiqueta-estado"
+                    th:classappend="${inspeccion.estado == 'APROBADA' ? 'estado-aprobada' :
+                                      (inspeccion.estado == 'OBSERVADA' ? 'estado-observada' :
+                                      (inspeccion.estado == 'PENDIENTE' ? 'estado-pendiente' : 'estado-borrador'))}"
+                    th:text="${inspeccion.estado}"
+                  >
+                    BORRADOR
+                  </span>
+                </td>
+
+                <td>
+                  <div class="acciones">
+                    <!-- DETALLE -->
+                    <a
+                      class="btn btn-sm btn-outline-primary"
+                      th:href="@{/inspecciones/detalle/{id}(id=${inspeccion.id})}"
+                    >
+                      <i class="bi bi-eye"></i>
+                      Ver detalle
+                    </a>
+
+                    <!-- EDITAR -->
+                    <a
+                      class="btn btn-sm btn-outline-secondary"
+                      th:href="@{/inspecciones/editar/{id}(id=${inspeccion.id})}"
+                    >
+                      <i class="bi bi-pencil-square"></i>
+                      Editar
+                    </a>
+
+                    <!-- ELIMINAR: SOLO ADMIN -->
+                    <form
+                      th:if="${esAdmin}"
+                      th:action="@{/inspecciones/eliminar/{id}(id=${inspeccion.id})}"
+                      method="post"
+                      class="m-0"
+                      onsubmit="
+                        return confirm(
+                          '¿Está seguro de eliminar esta inspección?',
+                        );
+                      "
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                      >
+                        <i class="bi bi-trash"></i>
+                        Eliminar
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- SIN REGISTROS -->
+              <tr th:if="${#lists.isEmpty(inspecciones)}">
+                <td colspan="7" class="text-center py-5 text-muted">
+                  <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+
+                  No se encontraron inspecciones con los filtros seleccionados.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="pie">
+      MINECORE 360 © 2026 | Desarrollado por Electro Data S.A.C.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

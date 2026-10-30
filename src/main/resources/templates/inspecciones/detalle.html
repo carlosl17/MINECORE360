@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle de inspección | MINECORE 360</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --azul: #101e32;
+        --amarillo: #ffbf1f;
+        --fondo: #f3f6fa;
+        --gris-borde: #d9e0e7;
+        --gris-suave: #f8fafc;
+        --texto: #243247;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--fondo);
+        font-family: Arial, sans-serif;
+        color: var(--texto);
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar-minecore {
+        background: var(--azul);
+        padding: 14px 0;
+      }
+
+      .marca {
+        color: white;
+        font-size: 24px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .marca span {
+        color: var(--amarillo);
+      }
+
+      .page-wrap {
+        padding: 20px 0 30px;
+      }
+
+      .encabezado {
+        margin-bottom: 14px;
+      }
+
+      .titulo {
+        color: var(--azul);
+        font-weight: 800;
+        font-size: 30px;
+        margin-bottom: 4px;
+      }
+
+      .subtitulo {
+        color: #66758a;
+        margin-bottom: 0;
+        font-size: 14px;
+      }
+
+      .estado-principal {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .card-minecore {
+        background: white;
+        border: 1px solid #e8edf3;
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      }
+
+      .titulo-seccion {
+        color: var(--azul);
+        font-weight: 800;
+        font-size: 18px;
+        border-left: 5px solid var(--amarillo);
+        padding-left: 10px;
+        margin-bottom: 14px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 18px;
+      }
+
+      .dato {
+        background: var(--gris-suave);
+        border: 1px solid var(--gris-borde);
+        border-radius: 10px;
+        padding: 10px 12px;
+        min-height: 68px;
+      }
+
+      .dato-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #66758a;
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+      }
+
+      .dato-valor {
+        font-size: 16px;
+        font-weight: 700;
+        color: #17253b;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .subsistemas-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .sistema {
+        background: var(--gris-suave);
+        border: 1px solid var(--gris-borde);
+        border-radius: 10px;
+        padding: 10px 12px;
+        min-height: 88px;
+      }
+
+      .sistema-nombre {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--azul);
+        line-height: 1.25;
+        margin-bottom: 8px;
+      }
+
+      .estado-chip {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 16px;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .estado-operativo {
+        background: #d1e7dd;
+        color: #0f5132;
+      }
+
+      .estado-observado {
+        background: #fff3cd;
+        color: #664d03;
+      }
+
+      .estado-no-operativo {
+        background: #f8d7da;
+        color: #842029;
+      }
+
+      .estado-neutral {
+        background: #e2e3e5;
+        color: #41464b;
+      }
+
+      .observaciones-box {
+        background: var(--gris-suave);
+        border: 1px solid var(--gris-borde);
+        border-radius: 10px;
+        padding: 12px;
+        min-height: 90px;
+        font-size: 14px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .acciones {
+        margin-top: 10px;
+      }
+
+      .btn-minecore {
+        background: var(--amarillo);
+        color: var(--azul);
+        font-weight: 800;
+        border: none;
+        padding: 10px 20px;
+      }
+
+      .btn-minecore:hover {
+        background: #e4aa00;
+        color: var(--azul);
+      }
+
+      .footer {
+        text-align: center;
+        color: #7a8798;
+        font-size: 12px;
+        padding: 10px 0 22px;
+      }
+
+      @media (max-width: 992px) {
+        .subsistemas-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .info-grid,
+        .subsistemas-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 8mm;
+      }
+
+      @media print {
+        body {
+          background: white;
+          font-size: 11px;
+        }
+
+        .navbar-minecore,
+        .acciones,
+        .footer {
+          display: none !important;
+        }
+
+        .container {
+          max-width: 100% !important;
+          width: 100% !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+
+        .page-wrap {
+          padding: 0 !important;
+        }
+
+        .encabezado {
+          margin-bottom: 8px !important;
+        }
+
+        .titulo {
+          font-size: 22px !important;
+          margin-bottom: 2px !important;
+        }
+
+        .subtitulo {
+          font-size: 11px !important;
+        }
+
+        .card-minecore {
+          box-shadow: none !important;
+          border: 1px solid #cfd6de !important;
+          margin-bottom: 8px !important;
+          padding: 10px 12px !important;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .titulo-seccion {
+          font-size: 14px !important;
+          margin-bottom: 8px !important;
+          padding-left: 8px !important;
+        }
+
+        .info-grid {
+          gap: 8px 10px !important;
+        }
+
+        .dato {
+          padding: 8px 10px !important;
+          min-height: auto !important;
+        }
+
+        .dato-label {
+          font-size: 9px !important;
+          margin-bottom: 3px !important;
+        }
+
+        .dato-valor {
+          font-size: 12px !important;
+        }
+
+        .subsistemas-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          gap: 8px !important;
+        }
+
+        .sistema {
+          padding: 8px 9px !important;
+          min-height: auto !important;
+        }
+
+        .sistema-nombre {
+          font-size: 10px !important;
+          margin-bottom: 6px !important;
+        }
+
+        .estado-chip,
+        .estado-principal {
+          font-size: 9px !important;
+          padding: 4px 8px !important;
+        }
+
+        .observaciones-box {
+          min-height: auto !important;
+          padding: 8px 10px !important;
+          font-size: 11px !important;
+          line-height: 1.35 !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- BARRA SUPERIOR -->
+    <nav class="navbar-minecore">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a th:href="@{/}" class="marca"> MINECORE <span>360</span> </a>
+
+        <a th:href="@{/inspecciones}" class="btn btn-outline-light">
+          Volver al historial
+        </a>
+      </div>
+    </nav>
+
+    <main class="container page-wrap">
+      <!-- ENCABEZADO -->
+      <div
+        class="encabezado d-flex justify-content-between align-items-start gap-3 flex-wrap"
+      >
+        <div>
+          <h1 class="titulo">
+            Detalle de inspección #<span th:text="${inspeccion.id}"></span>
+          </h1>
+          <p class="subtitulo">Ficha técnica de mantenimiento preventivo</p>
+        </div>
+
+        <span
+          class="estado-principal"
+          th:classappend="${inspeccion.estado == 'APROBADA'} ? ' estado-operativo' :
+                  (${inspeccion.estado == 'OBSERVADA'} ? ' estado-no-operativo' :
+                  (${inspeccion.estado == 'PENDIENTE'} ? ' estado-observado' :
+                  ' estado-neutral'))"
+          th:text="${inspeccion.estado}"
+        >
+        </span>
+      </div>
+
+      <!-- INFORMACION GENERAL -->
+      <section class="card-minecore">
+        <div class="titulo-seccion">01. Información general</div>
+
+        <div class="info-grid">
+          <div class="dato">
+            <div class="dato-label">CAMIÓN DE ACARREO</div>
+            <div class="dato-valor" th:text="${inspeccion.camion.codigo}"></div>
+          </div>
+
+          <div class="dato">
+            <div class="dato-label">TÉCNICO RESPONSABLE</div>
+            <div class="dato-valor" th:text="${inspeccion.tecnico}"></div>
+          </div>
+
+          <div class="dato">
+            <div class="dato-label">FECHA Y HORA</div>
+            <div
+              class="dato-valor"
+              th:text="${#temporals.format(inspeccion.fechaInspeccion, 'dd/MM/yyyy HH:mm')}"
+            ></div>
+          </div>
+
+          <div class="dato">
+            <div class="dato-label">HORÓMETRO</div>
+            <div class="dato-valor" th:text="${inspeccion.horometro}"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSISTEMAS -->
+      <section class="card-minecore">
+        <div class="titulo-seccion">
+          02. Evaluación de subsistemas tecnológicos
+        </div>
+
+        <div class="subsistemas-grid">
+          <div class="sistema">
+            <div class="sistema-nombre">CAS - Collision Avoidance System</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.cas}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+
+          <div class="sistema">
+            <div class="sistema-nombre">OAS - Object Awareness System</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.oas}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+
+          <div class="sistema">
+            <div class="sistema-nombre">MEMS</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.mems}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+
+          <div class="sistema">
+            <div class="sistema-nombre">RAJANT - Red inalámbrica</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.rajant}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+
+          <div class="sistema">
+            <div class="sistema-nombre">TORSA</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.torsa}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+
+          <div class="sistema">
+            <div class="sistema-nombre">Gabinete tecnológico</div>
+            <span
+              class="estado-chip"
+              th:with="valor=${inspeccion.gabinete}"
+              th:classappend="${valor == 'OPERATIVO'} ? ' estado-operativo' :
+                          (${valor == 'OBSERVADO'} ? ' estado-observado' :
+                          (${valor == 'NO OPERATIVO'} ? ' estado-no-operativo' :
+                          ' estado-neutral'))"
+              th:text="${valor != null ? valor : 'SIN EVALUAR'}"
+            >
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTADOS -->
+      <section class="card-minecore">
+        <div class="titulo-seccion">03. Resultado y observaciones</div>
+
+        <div class="info-grid" style="margin-bottom: 12px">
+          <div class="dato">
+            <div class="dato-label">ESTADO GENERAL</div>
+            <div class="dato-valor" th:text="${inspeccion.estado}"></div>
+          </div>
+        </div>
+
+        <div class="dato-label" style="margin-bottom: 6px">
+          OBSERVACIONES TÉCNICAS
+        </div>
+        <div
+          class="observaciones-box"
+          th:text="${#strings.isEmpty(inspeccion.observaciones) ? 'Sin observaciones registradas.' : inspeccion.observaciones}"
+        ></div>
+      </section>
+
+      <!-- ACCIONES -->
+      <div class="acciones d-flex justify-content-end gap-3">
+        <a th:href="@{/inspecciones}" class="btn btn-outline-secondary px-4">
+          Volver al historial
+        </a>
+
+        <button type="button" class="btn btn-minecore" onclick="window.print()">
+          Imprimir ficha
+        </button>
+      </div>
+    </main>
+
+    <footer class="footer">MINECORE 360 | Electro Data S.A.C.</footer>
+  </body>
+</html>

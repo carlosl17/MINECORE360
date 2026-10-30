@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Formulario de Inspección | MINECORE 360</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --azul: #10233e;
+        --azul-sec: #193653;
+        --amarillo: #f5bc26;
+        --fondo: #f2f5f9;
+        --borde: #dce4ed;
+      }
+
+      body {
+        margin: 0;
+        background: var(--fondo);
+        font-family: Arial, Helvetica, sans-serif;
+        color: #2c3e50;
+      }
+
+      .navbar-minecore {
+        background: var(--azul);
+        border-bottom: 4px solid var(--amarillo);
+        padding: 14px 0;
+      }
+
+      .marca {
+        color: #fff !important;
+        text-decoration: none;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+
+      .marca span {
+        color: var(--amarillo);
+      }
+
+      .nav-enlace {
+        color: #e7edf4;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .nav-enlace:hover {
+        color: var(--amarillo);
+      }
+
+      .contenedor {
+        max-width: 1150px;
+        margin: 32px auto;
+        padding: 0 18px;
+      }
+
+      .titulo {
+        font-size: 27px;
+        font-weight: 800;
+        color: var(--azul);
+        margin-bottom: 6px;
+      }
+
+      .subtitulo {
+        color: #66768b;
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+
+      .tarjeta {
+        background: #fff;
+        border: 1px solid var(--borde);
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 16px rgba(20, 40, 70, 0.05);
+      }
+
+      .seccion-titulo {
+        background: var(--azul-sec);
+        color: #fff;
+        padding: 17px 22px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .seccion-titulo .numero {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--amarillo);
+        color: var(--azul);
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .seccion-cuerpo {
+        padding: 24px;
+      }
+
+      .form-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #46566b;
+        margin-bottom: 7px;
+      }
+
+      .form-control,
+      .form-select {
+        border: 1px solid #d4dfeb;
+        border-radius: 8px;
+        min-height: 44px;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #d8aa35;
+        box-shadow: 0 0 0 3px rgba(245, 188, 38, 0.15);
+      }
+
+      textarea.form-control {
+        min-height: 125px;
+      }
+
+      .requerido {
+        color: #dc3545;
+      }
+
+      .ayuda {
+        font-size: 12px;
+        color: #7b8798;
+        margin-top: 5px;
+      }
+
+      .btn-guardar {
+        background: var(--amarillo);
+        border: 1px solid var(--amarillo);
+        color: var(--azul);
+        font-weight: 800;
+        padding: 12px 24px;
+        border-radius: 9px;
+      }
+
+      .btn-guardar:hover {
+        background: #e8ad15;
+        color: var(--azul);
+      }
+
+      .btn-cancelar {
+        background: #fff;
+        border: 1px solid #bbc9d9;
+        color: #40516a;
+        font-weight: 700;
+        padding: 12px 24px;
+        border-radius: 9px;
+      }
+
+      .btn-cancelar:hover {
+        background: #e9eef4;
+      }
+
+      .barra-acciones {
+        background: #fff;
+        border: 1px solid var(--borde);
+        border-radius: 14px;
+        padding: 20px 24px;
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .estado-info {
+        background: #eef4fa;
+        border-left: 4px solid var(--amarillo);
+        padding: 12px 15px;
+        font-size: 13px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .pie {
+        text-align: center;
+        color: #8793a4;
+        font-size: 12px;
+        padding: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .titulo {
+          font-size: 23px;
+        }
+
+        .seccion-cuerpo {
+          padding: 17px;
+        }
+
+        .barra-acciones {
+          justify-content: stretch;
+        }
+
+        .barra-acciones .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- BARRA SUPERIOR -->
+    <nav class="navbar navbar-minecore">
+      <div class="container-fluid px-4">
+        <a class="marca" th:href="@{/dashboard}"> MINECORE <span>360</span> </a>
+
+        <div class="d-flex align-items-center gap-3">
+          <a class="nav-enlace" th:href="@{/dashboard}">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+          </a>
+
+          <a class="nav-enlace" th:href="@{/inspecciones}">
+            <i class="bi bi-list-ul"></i>
+            Historial
+          </a>
+
+          <form th:action="@{/logout}" method="post" class="m-0">
+            <button type="submit" class="btn btn-sm btn-outline-light">
+              Salir
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <main class="contenedor">
+      <h1 class="titulo">
+        <i class="bi bi-clipboard-check"></i>
+
+        <span th:if="${inspeccion.id == null}">
+          Nueva Inspección Preventiva
+        </span>
+
+        <span th:unless="${inspeccion.id == null}">
+          Editar Inspección Preventiva
+        </span>
+      </h1>
+
+      <p class="subtitulo">
+        Registro y evaluación de sistemas tecnológicos onboard de la flota de
+        acarreo minero.
+      </p>
+
+      <!-- ERRORES GENERALES -->
+      <div class="alert alert-danger" th:if="${mensajeError != null}">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>Verifique la información:</strong>
+
+        <span th:text="${mensajeError}"></span>
+      </div>
+
+      <!--
+        FORMULARIO PRINCIPAL
+        Spring Security mantiene protección CSRF.
+    -->
+      <form
+        th:action="@{/inspecciones/guardar}"
+        th:object="${inspeccion}"
+        method="post"
+      >
+        <!-- ID PARA EDICION -->
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- SECCION 01 -->
+        <section class="tarjeta">
+          <div class="seccion-titulo">
+            <span class="numero">01</span>
+            Datos generales de la inspección
+          </div>
+
+          <div class="seccion-cuerpo">
+            <div class="row g-4">
+              <!-- CAMION -->
+              <div class="col-md-6">
+                <label for="camion" class="form-label">
+                  Camión
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="camion"
+                  name="camion.id"
+                  class="form-select"
+                  th:classappend="${#fields.hasErrors('camion') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione un camión</option>
+
+                  <option
+                    th:each="c : ${camiones}"
+                    th:value="${c.id}"
+                    th:text="${c.codigo}"
+                    th:selected="${inspeccion.camion != null and inspeccion.camion.id == c.id}"
+                  ></option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('camion')}"
+                  th:errors="*{camion}"
+                ></div>
+              </div>
+
+              <!-- TECNICO -->
+              <div class="col-md-6">
+                <label for="tecnico" class="form-label">
+                  Técnico responsable
+                  <span class="requerido">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="tecnico"
+                  class="form-control"
+                  th:field="*{tecnico}"
+                  th:classappend="${#fields.hasErrors('tecnico') ? 'is-invalid' : ''}"
+                  maxlength="100"
+                  required
+                  placeholder="Nombre del técnico"
+                />
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('tecnico')}"
+                  th:errors="*{tecnico}"
+                ></div>
+              </div>
+
+              <!-- FECHA Y HORA -->
+              <div class="col-md-6">
+                <label for="fechaInspeccion" class="form-label">
+                  Fecha y hora
+                  <span class="requerido">*</span>
+                </label>
+
+                <input
+                  type="datetime-local"
+                  id="fechaInspeccion"
+                  name="fechaInspeccion"
+                  class="form-control"
+                  th:classappend="${#fields.hasErrors('fechaInspeccion') ? 'is-invalid' : ''}"
+                  th:value="${inspeccion.fechaInspeccion != null ? #temporals.format(inspeccion.fechaInspeccion, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                  required
+                />
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('fechaInspeccion')}"
+                  th:errors="*{fechaInspeccion}"
+                ></div>
+              </div>
+
+              <!-- HOROMETRO -->
+              <div class="col-md-6">
+                <label for="horometro" class="form-label">
+                  Horómetro
+                  <span class="requerido">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="horometro"
+                  class="form-control"
+                  th:field="*{horometro}"
+                  th:classappend="${#fields.hasErrors('horometro') ? 'is-invalid' : ''}"
+                  min="0"
+                  step="0.01"
+                  required
+                  placeholder="Ejemplo: 12500.50"
+                />
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('horometro')}"
+                  th:errors="*{horometro}"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCION 02 -->
+        <section class="tarjeta">
+          <div class="seccion-titulo">
+            <span class="numero">02</span>
+            Evaluación de subsistemas tecnológicos
+          </div>
+
+          <div class="seccion-cuerpo">
+            <div class="estado-info">
+              <i class="bi bi-info-circle"></i>
+
+              Seleccione el estado de cada subsistema inspeccionado. Opciones
+              permitidas:
+              <strong>Operativo, Observado o No operativo.</strong>
+            </div>
+
+            <div class="row g-4">
+              <!-- CAS -->
+              <div class="col-md-6">
+                <label for="cas" class="form-label">
+                  CAS - Sistema anticolisión
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="cas"
+                  class="form-select"
+                  th:field="*{cas}"
+                  th:classappend="${#fields.hasErrors('cas') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('cas')}"
+                  th:errors="*{cas}"
+                ></div>
+              </div>
+
+              <!-- OAS -->
+              <div class="col-md-6">
+                <label for="oas" class="form-label">
+                  OAS
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="oas"
+                  class="form-select"
+                  th:field="*{oas}"
+                  th:classappend="${#fields.hasErrors('oas') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('oas')}"
+                  th:errors="*{oas}"
+                ></div>
+              </div>
+
+              <!-- MEMS -->
+              <div class="col-md-6">
+                <label for="mems" class="form-label">
+                  MEMS
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="mems"
+                  class="form-select"
+                  th:field="*{mems}"
+                  th:classappend="${#fields.hasErrors('mems') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('mems')}"
+                  th:errors="*{mems}"
+                ></div>
+              </div>
+
+              <!-- RAJANT -->
+              <div class="col-md-6">
+                <label for="rajant" class="form-label">
+                  RAJANT
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="rajant"
+                  class="form-select"
+                  th:field="*{rajant}"
+                  th:classappend="${#fields.hasErrors('rajant') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('rajant')}"
+                  th:errors="*{rajant}"
+                ></div>
+              </div>
+
+              <!-- TORSA -->
+              <div class="col-md-6">
+                <label for="torsa" class="form-label">
+                  TORSA
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="torsa"
+                  class="form-select"
+                  th:field="*{torsa}"
+                  th:classappend="${#fields.hasErrors('torsa') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('torsa')}"
+                  th:errors="*{torsa}"
+                ></div>
+              </div>
+
+              <!-- GABINETE -->
+              <div class="col-md-6">
+                <label for="gabinete" class="form-label">
+                  Gabinete tecnológico
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="gabinete"
+                  class="form-select"
+                  th:field="*{gabinete}"
+                  th:classappend="${#fields.hasErrors('gabinete') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="">Seleccione estado</option>
+
+                  <option value="OPERATIVO">Operativo</option>
+
+                  <option value="OBSERVADO">Observado</option>
+
+                  <option value="NO OPERATIVO">No operativo</option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('gabinete')}"
+                  th:errors="*{gabinete}"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCION 03 -->
+        <section class="tarjeta">
+          <div class="seccion-titulo">
+            <span class="numero">03</span>
+            Resultado general y observaciones
+          </div>
+
+          <div class="seccion-cuerpo">
+            <div class="row g-4">
+              <!-- ESTADO GENERAL -->
+              <div class="col-md-6">
+                <label for="estado" class="form-label">
+                  Estado general
+                  <span class="requerido">*</span>
+                </label>
+
+                <select
+                  id="estado"
+                  class="form-select"
+                  th:field="*{estado}"
+                  th:classappend="${#fields.hasErrors('estado') ? 'is-invalid' : ''}"
+                  required
+                >
+                  <option value="BORRADOR">Borrador</option>
+
+                  <option value="PENDIENTE">Pendiente</option>
+
+                  <!--
+                                Se muestran a usuarios
+                                privilegiados solamente
+                                cuando el controlador
+                                envía esEstandar.
+                            -->
+                  <option value="OBSERVADA" th:unless="${esEstandar == true}">
+                    Observada
+                  </option>
+
+                  <option value="APROBADA" th:unless="${esEstandar == true}">
+                    Aprobada
+                  </option>
+                </select>
+
+                <div
+                  class="invalid-feedback"
+                  th:if="${#fields.hasErrors('estado')}"
+                  th:errors="*{estado}"
+                ></div>
+
+                <p class="ayuda">
+                  El Supervisor o Administrador puede aprobar u observar una
+                  inspección.
+                </p>
+              </div>
+
+              <!-- OBSERVACIONES -->
+              <div class="col-12">
+                <label for="observaciones" class="form-label">
+                  Observaciones técnicas
+                </label>
+
+                <textarea
+                  id="observaciones"
+                  class="form-control"
+                  rows="5"
+                  th:field="*{observaciones}"
+                  placeholder="Describa hallazgos, anomalías, recomendaciones o acciones necesarias..."
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BOTONES -->
+        <div class="barra-acciones">
+          <a class="btn btn-cancelar" th:href="@{/inspecciones}">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+
+          <button type="submit" class="btn btn-guardar">
+            <i class="bi bi-save"></i>
+
+            <span th:if="${inspeccion.id == null}"> Guardar inspección </span>
+
+            <span th:unless="${inspeccion.id == null}">
+              Actualizar inspección
+            </span>
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="pie">
+      MINECORE 360 © 2026 | Desarrollado por Electro Data S.A.C.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+
+# ============================================================
+# MINECORE 360
+# Sistema de Mantenimiento Preventivo Minero
+# Desarrollado por Electro Data S.A.C.
+# Configuración Git - Spring Boot / Maven / MySQL
+# ============================================================
+
+# DOCUMENTACION GENERADA
+HELP.md
+
+# COMPILACION MAVEN
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Conservar el archivo Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# COMPILACION GRADLE (SI SE UTILIZA)
+build/
+**/build/
+.gradle/
+
+# MAVEN
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# SPRING TOOL SUITE
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# INTELLIJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# NETBEANS
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VISUAL STUDIO CODE
+.vscode/
+.history/
+*.code-workspace
+
+# SISTEMA OPERATIVO WINDOWS
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# MACOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# LINUX
+*~
+
+# VARIABLES DE ENTORNO Y CREDENCIALES
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets/
+credentials/
+
+# CONFIGURACIONES PRIVADAS LOCALES
+application-local.properties
+application-local.yml
+application-local.yaml
+application-secret.properties
+application-secret.yml
+application-secret.yaml
+
+# No ignorar application.properties general:
+# Debe utilizar variables de entorno, no contraseñas reales.
+
+# BASES DE DATOS Y RESPALDOS
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+# BACKUPS DEL PROYECTO
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+
+# LOGS Y ARCHIVOS TEMPORALES
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*.swo
+*.orig
+*.rej
+
+# REPORTES TEMPORALES
+error_minecore.txt
+hs_err_pid*
+replay_pid*
+
+# ARCHIVOS DE COBERTURA
+coverage/
+.coverage
+jacoco.exec
+
+# ============================================================
+# FIN DEL ARCHIVO .gitignore - MINECORE 360
+# ============================================================

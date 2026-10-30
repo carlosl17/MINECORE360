@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MINECORE 360 | Electro Data S.A.C.</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --azul: #101f34;
+        --amarillo: #ffb900;
+        --fondo: #f3f6fa;
+        --texto: #10233e;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--fondo);
+        color: var(--texto);
+      }
+
+      .navbar-minecore {
+        background: var(--azul);
+        padding: 17px 0;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+      }
+
+      .marca {
+        font-size: 21px;
+        font-weight: 900;
+        color: white;
+        text-decoration: none;
+        letter-spacing: 0.4px;
+      }
+
+      .marca span {
+        color: var(--amarillo);
+      }
+
+      .menu-link {
+        color: #d2dae5;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s;
+      }
+
+      .menu-link:hover,
+      .menu-link.activo {
+        color: var(--amarillo);
+      }
+
+      .btn-ingresar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 21px;
+        border-radius: 7px;
+        background: var(--amarillo);
+        color: #10233e;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 13px;
+        border: none;
+        box-shadow: 0 5px 14px rgba(255, 185, 0, 0.22);
+      }
+
+      .btn-ingresar:hover {
+        background: #e9ab00;
+        color: #10233e;
+      }
+
+      .hero {
+        background: linear-gradient(125deg, #0e2139, #173957);
+        color: white;
+        padding: 68px 0;
+      }
+
+      .hero-etiqueta {
+        color: #ffc940;
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        font-size: clamp(30px, 4vw, 49px);
+        font-weight: 900;
+        line-height: 1.17;
+        margin: 16px 0;
+      }
+
+      .hero p {
+        color: #c2d0df;
+        line-height: 1.8;
+        max-width: 590px;
+      }
+
+      .hero-icono {
+        font-size: 150px;
+        color: var(--amarillo);
+        opacity: 0.85;
+        text-align: center;
+      }
+
+      .seccion {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 52px 15px;
+        scroll-margin-top: 90px;
+      }
+
+      .titulo-seccion {
+        font-size: 27px;
+        font-weight: 900;
+        margin-bottom: 8px;
+      }
+
+      .subtitulo-seccion {
+        color: #6d7d93;
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+
+      .tarjeta-modulo {
+        display: block;
+        height: 100%;
+        background: white;
+        border: 1px solid #e0e7ef;
+        border-radius: 13px;
+        padding: 24px;
+        box-shadow: 0 3px 6px rgba(20, 40, 70, 0.05);
+        color: inherit;
+        text-decoration: none;
+        transition: 0.2s;
+      }
+
+      .tarjeta-modulo:hover {
+        transform: translateY(-4px);
+        border-color: #f1c75e;
+        box-shadow: 0 8px 22px rgba(20, 40, 70, 0.1);
+        color: inherit;
+      }
+
+      .tarjeta-modulo i {
+        color: #f0ae00;
+        font-size: 31px;
+        display: inline-block;
+        margin-bottom: 17px;
+      }
+
+      .tarjeta-modulo h3 {
+        font-size: 16px;
+        font-weight: 900;
+        margin-bottom: 9px;
+      }
+
+      .tarjeta-modulo p {
+        color: #627590;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 0;
+      }
+
+      .tarjeta-rol {
+        background: white;
+        border: 1px solid #e0e7ef;
+        border-radius: 12px;
+        padding: 25px;
+        height: 100%;
+      }
+
+      .tarjeta-rol i {
+        color: #f0ae00;
+        font-size: 28px;
+      }
+
+      .tarjeta-rol h3 {
+        font-size: 17px;
+        font-weight: 800;
+        margin-top: 12px;
+      }
+
+      .tarjeta-rol p {
+        color: #65758c;
+        font-size: 13px;
+        line-height: 1.7;
+        margin-bottom: 0;
+      }
+
+      .seccion-nosotros {
+        background: #fff;
+        border-top: 1px solid #e3eaf3;
+      }
+
+      footer {
+        background: var(--azul);
+        color: #aebed0;
+        padding: 25px 0;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          padding: 43px 0;
+        }
+        .hero-icono {
+          display: none;
+        }
+        .seccion {
+          padding-top: 36px;
+          padding-bottom: 36px;
+        }
+        .menu-link {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-minecore sticky-top">
+      <div class="container">
+        <a th:href="@{/}" class="marca"> MINECORE <span>360</span> </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuPrincipal"
+          aria-controls="menuPrincipal"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+          <div
+            class="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0"
+          >
+            <a th:href="@{/}" class="menu-link activo">Inicio</a>
+            <a th:href="@{/#modulos}" class="menu-link">Módulos</a>
+            <a th:href="@{/#roles}" class="menu-link">Roles</a>
+            <a th:href="@{/#nosotros}" class="menu-link">Nosotros</a>
+
+            <!-- BOTÓN DE ACCESO FUNCIONAL -->
+            <a th:href="@{/login}" class="btn-ingresar">
+              <i class="bi bi-box-arrow-in-right"></i>
+              Ingresar
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PORTADA -->
+    <section id="inicio" class="hero">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <div class="hero-etiqueta">Electro Data S.A.C.</div>
+
+            <h1>Gestión inteligente del mantenimiento tecnológico minero</h1>
+
+            <p>
+              Plataforma web para el control, seguimiento y trazabilidad de
+              inspecciones preventivas de sistemas tecnológicos onboard en
+              camiones de acarreo minero.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3 mt-4">
+              <a th:href="@{/login}" class="btn-ingresar">
+                <i class="bi bi-shield-lock"></i>
+                Acceder al sistema
+              </a>
+
+              <a th:href="@{/#modulos}" class="btn btn-outline-light px-4 py-2">
+                Conocer módulos
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 hero-icono">
+            <i class="bi bi-truck-front-fill"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULOS -->
+    <section id="modulos" class="seccion">
+      <h2 class="titulo-seccion">Módulos principales</h2>
+
+      <p class="subtitulo-seccion">
+        Soluciones integradas para la gestión del mantenimiento tecnológico
+        minero.
+      </p>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/inspecciones}" class="tarjeta-modulo">
+            <i class="bi bi-clipboard-check"></i>
+            <h3>Inspecciones preventivas</h3>
+            <p>
+              Registro y evaluación de los sistemas CAS, OAS, MEMS, Rajant,
+              TORSA y Gabinete.
+            </p>
+          </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/dashboard}" class="tarjeta-modulo">
+            <i class="bi bi-bar-chart-line"></i>
+            <h3>Dashboard</h3>
+            <p>
+              Visualización de indicadores, estadísticas y resultados del
+              mantenimiento minero.
+            </p>
+          </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/camiones}" class="tarjeta-modulo">
+            <i class="bi bi-truck"></i>
+            <h3>Gestión de camiones</h3>
+            <p>
+              Registro, administración y consulta de la flota de camiones de
+              acarreo minero.
+            </p>
+          </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/inspecciones}" class="tarjeta-modulo">
+            <i class="bi bi-clock-history"></i>
+            <h3>Historial de mantenimientos</h3>
+            <p>
+              Consulta de inspecciones anteriores, observaciones y trazabilidad
+              por camión.
+            </p>
+          </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/inspecciones}" class="tarjeta-modulo">
+            <i class="bi bi-file-earmark-excel"></i>
+            <h3>Reportes Excel</h3>
+            <p>
+              Reportes de inspecciones por técnico, camión, fecha y estado,
+              según permisos.
+            </p>
+          </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <a th:href="@{/login}" class="tarjeta-modulo">
+            <i class="bi bi-calendar-check"></i>
+            <h3>Programación PM</h3>
+            <p>
+              Próxima funcionalidad: planificación de mantenimientos por fecha,
+              horómetro y estado del camión.
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLES -->
+    <section id="roles" class="seccion pt-0">
+      <h2 class="titulo-seccion">Perfiles de acceso</h2>
+
+      <p class="subtitulo-seccion">
+        Permisos organizados para una operación controlada.
+      </p>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="tarjeta-rol">
+            <i class="bi bi-person-badge"></i>
+            <h3>Usuario Estándar</h3>
+            <p>
+              Registra inspecciones, consulta sus registros y exporta sus
+              reportes individuales a Excel.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="tarjeta-rol">
+            <i class="bi bi-person-check"></i>
+            <h3>Supervisor</h3>
+            <p>
+              Consulta inspecciones generales, revisa resultados, administra
+              camiones y exporta reportes generales.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="tarjeta-rol">
+            <i class="bi bi-shield-lock"></i>
+            <h3>Administrador</h3>
+            <p>
+              Gestiona las operaciones autorizadas del sistema, incluida la
+              eliminación de registros y gestión de la flota.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section id="nosotros" class="seccion-nosotros">
+      <div class="seccion">
+        <h2 class="titulo-seccion">Acerca de MINECORE 360</h2>
+
+        <p class="subtitulo-seccion mb-3">
+          Solución desarrollada por Electro Data S.A.C.
+        </p>
+
+        <p class="text-secondary">
+          MINECORE 360 facilita el registro y seguimiento de inspecciones
+          preventivas, la consulta del historial de mantenimiento y la
+          elaboración de reportes de los subsistemas tecnológicos instalados en
+          flotas de acarreo minero.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 MINECORE 360 | Electro Data S.A.C.
+      <span class="d-block mt-1">
+        Sistema Web de Gestión de Mantenimientos Preventivos
+      </span>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
